@@ -6,6 +6,14 @@
 <form action="/store/movie" method="post" enctype="multipart/form-data">
     @csrf
     <div class="form-group m-1">
+        <select name="category" class="form-control">
+            <option selected disabled>--Pasirinkite kategorija--</option>
+            @foreach($categories as $category)
+            <option value="{{$category->id}}">{{$category->title}}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="form-group m-1">
         <input type="text" name="title" class="form-control" placeholder="Filmo pavadinimas">
     </div>
     <div class="form-group m-1">

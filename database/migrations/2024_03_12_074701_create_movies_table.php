@@ -19,6 +19,8 @@ return new class extends Migration
             $table->date('created');
             $table->longText('description');
             $table->string('poster')->nullable();
+            $table->foreignId('category_id');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }

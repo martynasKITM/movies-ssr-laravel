@@ -4,16 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Movie;
+use App\Models\Category;
 use File;
+use Auth;
 class MovieController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('auth',['except'=>['index','show']]);
+    }
     public function index(){
         $movies = Movie::all();
         return view('pages.home', compact('movies'));
     }
 
     public function addMovie(){
-        return view('pages.add-movie');
+        $categories = Category::all();
+        return view('pages.add-movie',compact('categories'));
     }
 
     public function storeMovie(Request $request){
@@ -22,7 +29,8 @@ class MovieController extends Controller
             'imdb'=>'required|max:2',
             'director'=>'required',
             'created'=>'required',
-            'description'=>'required'
+            'description'=>'required',
+            'category' => 'required'
         ]);
         //dd($request);
         if(request()->hasFile('poster')){
@@ -35,7 +43,9 @@ class MovieController extends Controller
             'director'=>request('director'),
             'description'=>request('description'),
             'created'=>request('created'),
-            'poster'=>$path
+            'poster'=>$path,
+            'category_id'=> request('category'),
+            'user_id'=>Auth::id()
         ]);
         return redirect('/');
     }
