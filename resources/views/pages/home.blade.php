@@ -13,5 +13,6 @@
         </ul>
     </div>
     @endforeach
+    {{$movies->links()}}
   </div>                 
 @endsection

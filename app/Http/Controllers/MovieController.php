@@ -7,6 +7,7 @@ use App\Models\Movie;
 use App\Models\Category;
 use File;
 use Auth;
+use Gate;
 class MovieController extends Controller
 {
 
@@ -14,7 +15,7 @@ class MovieController extends Controller
         $this->middleware('auth',['except'=>['index','show']]);
     }
     public function index(){
-        $movies = Movie::all();
+        $movies = Movie::paginate(3);
         return view('pages.home', compact('movies'));
     }
 
@@ -55,11 +56,17 @@ class MovieController extends Controller
     }
 
     public function destroy(Movie $movie){
+        if(Gate::denies('delete-movie',$movie)){
+            dd('Tu neesi savininkas sio sutinio. Ir negali jo pasalinti.');
+        }
         $movie->delete();
         return redirect('/');
     }
 
     public function edit(Movie $movie){
+        if(Gate::denies('edit-movie',$movie)){
+            dd('Tu neesi savininkas sio sutinio. Ir negali jo keisti.');
+        }
         return view('pages.edit-movie', compact('movie'));
     }
 
